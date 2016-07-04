@@ -1,5 +1,5 @@
 ﻿
-
+//global variabels
 var deck = [];
 var cardValues = {
     ace: 11,
@@ -14,7 +14,7 @@ var user = {
     draw: { name: "draw" }
 };
 
-
+//card class
 function card(value, suit) {
     this.value = value;
     this.suit = suit;
@@ -33,6 +33,7 @@ function startDeck() {
     deck = mixDeck(deck);
 }
 
+//start function
 function start() {
     reset();
     startDeck();
@@ -43,31 +44,36 @@ function start() {
     card = deal();
     valueCounter(card, user.player);
     disabledButtons(true, false, false);
+
+    //check if player get blackjack on the first draw
     if (user.player.score === 21) {
         lose(user.dealer);
     }
 }
 
+//then player pressed stand and its dealers turn
 function dealersTurn() {
+    //draw a new card as long as dealer has lover score then 17
     while (dealerThenToStop.min >= user.dealer.score) {
         var card = deal();
         valueCounter(card, user.dealer);
     }
   
     if (user.dealer.score <= 21) {
+        //Draw
         if (user.dealer.score === user.player.score) {
             lose(user.draw);
 
             return;
         }
-        if (user.dealer.score > user.player.score) lose(user.player);
-        else lose(user.dealer);
+        if (user.dealer.score > user.player.score) lose(user.player); //If dealer has more score, dealer win
+        else lose(user.dealer);//else Players win
     }
-    else {
+    else {//if has ace and over 21, count ace a s 1
         if (user.dealer.hasAce > 0){
             user.dealer.score -= (cardValues.ace - 1);
             user.dealer.hasAce--;
-            dealersTurn();
+            dealersTurn();//restart the loop
         }
         else lose(user.dealer);
     }
@@ -76,33 +82,34 @@ function dealersTurn() {
 
 }
 
+//Count the value to the scoreboard
 function valueCounter(card, currentPlayer) {
     var result = currentPlayer.score;
     switch (card.value) {
         case "A":
             result = result + parseInt(cardValues.ace);
-            cardValue = parseInt(cardValues.ace) + "/" + (parseInt(cardValues.ace) + 10);
             currentPlayer.hasAce++;
             break;
         case "J":
         case "Q":
         case "K":
             result = result + parseInt(cardValues.face);
-            cardValue = parseInt(cardValues.face);
             break;
         default:
             result = result + parseInt(card.value);
-            cardValue = parseInt(card.value);
     }
     currentPlayer.score = result;
     addCard(card, currentPlayer);
     displayScore()
 }
 
+//Display the scoreboard
 function displayScore() {
     document.getElementById("playerScore").innerText = user.player.score;
     document.getElementById("dealerScore").innerText = user.dealer.score;
 }
+
+//add the card image
 function addCard(card, currentUser) {
     var img = new Image;
     img.src = "images/" + card.value + "_of_" + card.suit + ".png";
@@ -116,6 +123,7 @@ function addCard(card, currentUser) {
     }
 }
 
+//Shuffel the deck
 function mixDeck(tmpDeck) {
     for (var i = 0; i < tmpDeck.length; i++) {
         var rmd = Math.floor(Math.random() * tmpDeck.length);
@@ -126,6 +134,7 @@ function mixDeck(tmpDeck) {
     return tmpDeck;
 }
 
+//Pick the first card and remove it from the array
 function deal() {
     if (deck.length > 0) {
         var card = deck.shift();
@@ -134,15 +143,17 @@ function deal() {
     return null;
 }
 
+//let the dealer make the turns
 function stand() {
     dealersTurn();
 }
+//Draw a card 
 function hit() {
     var card = deal();
     valueCounter(card, user.player);
-
+    //check if the score is over 21
     if (user.player.score > 21) {
-        if (user.player.hasAce > 0) {
+        if (user.player.hasAce > 0) {//check if the score has a ace
             user.player.score -= (cardValues.ace - 1);
             user.player.hasAce--;
         }
@@ -170,8 +181,8 @@ function reset() {
     deck = [];//Clear deck
     user.player.score = 0;//set score to 0
     user.dealer.score = 0;
-    user.player.hasAce = false;
-    user.dealer.hasAce = false;
+    user.player.hasAce = 0;
+    user.dealer.hasAce = 0;
     document.getElementById("winner").innerText = "";//clear winnertext
     //clear all card images.
     var playerDiv = document.getElementById("playerDiv");

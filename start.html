@@ -8,18 +8,18 @@
 </head>
 <body>
 
-    <div style="width:100%;height:230px; text-align:center;">      
-            <div id="dealerName" style="font-size:40px"><span>Dealer</span></div>
-            <div id="dealerScore" style="font-size:20px"></div>       
+    <div class="dealerBoard">      
+            <div id="dealerName" class="font40"><span>Dealer</span></div>
+            <div id="dealerScore" class="font20"></div>       
             <div id="dealerDiv"></div>
         </div>
 
-    <div style="width: 100%;height: 100px;vertical-align: middle;line-height:100px; text-align: center;font-size: 80px;" id="winner"></div>
+    <div id="winner"></div>
 
-    <div style="width: 100%; margin: 0 auto; text-align:center; ">
+    <div class="playerBoard">
         <div id="playerDiv" style="padding-top:183px;"></div>  
-            <div id="playerScore"style="font-size:20px"></div>
-            <div id="playerName" style="font-size:40px">Player</div>
+            <div id="playerScore" class="font20"></div>
+            <div id="playerName" class="font40">Player</div>
             <input type="button" onclick="start()" id="dealBtn" value="DEAL" />
             <input type="button" id="hitBtn" value="HIT" onclick="hit()" />
             <input type="button" id="standBtn" value="STAND" onclick="stand()" />
